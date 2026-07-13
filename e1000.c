@@ -100,7 +100,7 @@ e1000_transmit(struct mbuf *m)
   int idx = regs[E1000_TDT];
 
   if (!(tx_ring[idx].status & E1000_TXD_STAT_DD)) {
-    //release(&e1000_lock);
+    release(&e1000_lock);
     return -1;  
   }
 
@@ -135,7 +135,9 @@ e1000_recv(void)
     struct mbuf *m = rx_mbufs[idx];
 
     m->len = rx_ring[idx].length;
+    release(&e1000_lock);
     net_rx(m);
+    acquire(&e1000_lock);
 
     rx_mbufs[idx] = mbufalloc(0);
     if (!rx_mbufs[idx]) {
