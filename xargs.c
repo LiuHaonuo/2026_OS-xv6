@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     char *fixed_args[MAXARG];
     int fixed_argc = 0;
     
-    for (int i = 2; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         fixed_args[fixed_argc++] = argv[i];
     }
     
@@ -43,15 +43,15 @@ int main(int argc, char *argv[]) {
         char c;
         while (read(0, &c, 1) == 1) {
             if (c == '\n') {
-                line[i] = '\0';
-                break;
+                break; // 遇到换行直接 break
             }
             line[i++] = c;
             if (i >= sizeof(line) - 1) {
-                line[i] = '\0';
-                break;
+                break; // 数组满了也 break
             }
         }
+        
+        line[i] = '\0';
         
         if (i == 0) break;
         if (line[0] == '\0') continue;
